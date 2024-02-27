@@ -33,5 +33,5 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
 use App\Http\Controllers\AccountController;
 
-Route::get('/accounts/create', [AccountController::class, 'showCreateForm'])->name('accounts.create');
+Route::get('/create', [AccountController::class, 'showCreateForm'])->name('accounts.create');
 Route::post('/accounts', [AccountController::class, 'create'])->name('accounts.store');
