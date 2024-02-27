@@ -28,3 +28,10 @@ Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard')->middleware('auth');
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
+
+
+use App\Http\Controllers\AccountController;
+
+Route::get('/accounts/create', [AccountController::class, 'showCreateForm'])->name('accounts.create');
+Route::post('/accounts', [AccountController::class, 'create'])->name('accounts.store');
