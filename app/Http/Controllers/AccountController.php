@@ -40,4 +40,14 @@ class AccountController extends Controller
         // Rediriger l'utilisateur vers une page de confirmation ou toute autre page appropriée
         return redirect('/')->with('success', 'Le compte a été créé avec succès.');
     }
+
+    public function checkUnique(Request $request)
+    {
+        $field = $request->input('field');
+        $value = $request->input('value');
+
+        $exists = User::where($field, $value)->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
 }

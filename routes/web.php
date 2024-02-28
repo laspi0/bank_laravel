@@ -35,3 +35,4 @@ use App\Http\Controllers\AccountController;
 
 Route::get('/create', [AccountController::class, 'showCreateForm'])->name('accounts.create');
 Route::post('/accounts', [AccountController::class, 'create'])->name('accounts.store');
+Route::post('/check-unique', [AccountController::class, 'checkUnique']);

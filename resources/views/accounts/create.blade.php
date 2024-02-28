@@ -75,13 +75,16 @@
 
                                 <div class="form-group mb-3">
                                     <label for="account_number">Numéro de compte</label>
-                                    <input id="account_number" type="text" class="form-control form-control-sm @error('account_number') is-invalid @enderror" name="account_number" value="{{ old('account_number') }}" required autofocus>
+                                    <input disabled type="text" name="account_number" id="account_number" value="{{ old('account_number') }}" class="form-control form-control-sm @error('account_number') is-invalid @enderror" placeholder="numero de compte" aria-label="Recipient's username" aria-describedby="button-addon2">
 
                                     @error('account_number')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-primary" type="button" type="button" id="button-addon2">Générer un numero de compte</button>
                                 </div>
 
                             </div> <!-- /.col -->
@@ -148,15 +151,18 @@
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="branch_number">{{ __('Numéro d\'agence') }}</label>
-
-                                    <input id="branch_number" type="text" class="form-control form-control-sm @error('branch_number') is-invalid @enderror" name="branch_number" value="{{ old('branch_number') }}" required>
-
+                                    <input readonly type="text" name="branch_number" id="branch_number" value="{{ old('branch_number') }}" class="form-control form-control-sm @error('branch_number') is-invalid @enderror" placeholder="code du guichet" aria-label="Recipient's username" aria-describedby="button-addon2" required>
                                     @error('branch_number')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
                                 </div>
+
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary btn-sm " type="button" id="button-addon1">Générer un numero de guichet</button>
+                                </div>
+
 
                                 <div class="form-group row">
                                     <div class="col-md-12">
@@ -174,6 +180,105 @@
         </div> <!-- .col-12 -->
 </div> <!-- .row -->
 </form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<!-- Inclure SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    $(document).ready(function() {
+
+        // Fonction pour générer le numéro de compte et le numéro de guichet
+        function generateAccountInfo() {
+            // Générer un numéro de compte aléatoire (par exemple, un nombre à 10 chiffres)
+            var accountNumber = Math.floor(Math.random() * 9000000000) + 1000000000;
+
+            $('#account_number').val(accountNumber);
+        }
+
+        function generateBranchInfo() {
+            var branchNumber = Math.floor(Math.random() * 9000) + 1000;
+            $('#branch_number').val(branchNumber);
+        }
+
+        // Écouter l'événement 'click' sur le bouton de génération
+        $('#button-addon2').click(function() {
+            // Générer le numéro de compte et le numéro de guichet
+            generateAccountInfo();
+        });
+        $('#button-addon1').click(function() {
+            // Générer le numéro de compte et le numéro de guichet
+            generateBranchInfo();
+        });
+
+        // Fonction pour vérifier le champ et afficher l'alerte
+        function checkFieldAndAlert(field, fieldName, value) {
+            $.ajax({
+                url: '/check-unique',
+                method: 'POST',
+                data: {
+                    field: field,
+                    value: value,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.exists) {
+                        // Affichage de l'alerte personnalisée
+                        Swal.fire({
+                            title: 'Attention!',
+                            text: 'Ce ' + fieldName + ' existe déjà.',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            // Supprime le champ concerné
+                            $('input[name="' + field + '"]').val('');
+                            // Réinitialise le champ pour une nouvelle vérification
+                            $('input[name="' + field + '"]').data('checked', false);
+                        });
+                    } else {
+                        // Si le champ est unique, marquer comme vérifié
+                        $('input[name="' + field + '"]').data('checked', true);
+                    }
+                }
+            });
+        }
+
+        // Écouter l'événement 'input' pour chaque champ
+        $('input[name="email"], input[name="account_number"], input[name="national_id"]').on('input', function() {
+            var field = $(this).attr('name');
+            var value = $(this).val();
+            var fieldName = '';
+
+            // Déterminez le nom du champ en français
+            switch (field) {
+                case 'email':
+                    fieldName = 'email';
+                    break;
+                case 'account_number':
+                    fieldName = 'numéro de compte';
+                    break;
+                case 'national_id':
+                    fieldName = 'numéro de carte d\'identité';
+                    break;
+                default:
+                    fieldName = field;
+            }
+
+            // Vérifier si le champ a déjà été vérifié
+            var checked = $('input[name="' + field + '"]').data('checked');
+
+            // Si le champ n'a pas été vérifié ou si la valeur a changé
+            if (!checked || $(this).data('value') !== value) {
+                // Mettre à jour la valeur enregistrée pour le champ
+                $(this).data('value', value);
+                // Vérifier le champ et afficher l'alerte
+                checkFieldAndAlert(field, fieldName, value);
+            }
+        });
+    });
+</script>
 
 
 @endsection
