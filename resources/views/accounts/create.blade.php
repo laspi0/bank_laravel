@@ -75,7 +75,7 @@
 
                                 <div class="form-group mb-3">
                                     <label for="account_number">Numéro de compte</label>
-                                    <input disabled type="text" name="account_number" id="account_number" value="{{ old('account_number') }}" class="form-control form-control-sm @error('account_number') is-invalid @enderror" placeholder="numero de compte" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <input readonly type="text" name="account_number" id="account_number" value="{{ old('account_number') }}" class="form-control form-control-sm @error('account_number') is-invalid @enderror" placeholder="numero de compte" aria-label="Recipient's username" aria-describedby="button-addon2">
 
                                     @error('account_number')
                                     <span class="invalid-feedback" role="alert">

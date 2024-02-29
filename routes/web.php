@@ -3,6 +3,17 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\TellerController;
+
+
+// Affiche le formulaire de dépôt
+Route::get('teller/deposit', [TellerController::class, 'showDepositForm']);
+Route::post('teller/deposit', [TellerController::class, 'makeDeposit'])->name('deposit.make');
+Route::get('/get-client-info', [TellerController::class, 'getClientInfo'])->name('get.client.info');
+Route::get('teller/withdrawal', [TellerController::class, 'showWithdrawalForm']);
+Route::post('teller/withdrawal', [TellerController::class, 'makeWithdrawal'])->name('withdrawal.make');
+Route::get('teller/balance', [TellerController::class, 'showBalanceForm']);
+Route::get('teller/get-account-balance', [TellerController::class, 'getAccountBalance'])->name('get.account.balance');
 
 // Page d'accueil
 Route::get('/', function () {
@@ -33,7 +44,6 @@ Route::middleware(['auth', 'teller'])->group(function () {
 Route::middleware(['auth', 'client'])->group(function () {
     Route::get('/client/dashboard', [UserController::class, 'clientDashboard'])->name('client.dashboard');
 });
-
 
 use App\Http\Controllers\AdminController;
 
