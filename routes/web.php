@@ -4,6 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\TellerController;
+use App\Http\Controllers\ClientController;
+
+
+
+
+Route::get('client/transfer', [ClientController::class, 'showTransferForm'])->name('transfer-form');
+Route::post('client/transfer', [ClientController::class, 'transfer'])->name('transfer');
+
 
 
 // Affiche le formulaire de dépôt
