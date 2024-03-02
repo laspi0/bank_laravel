@@ -8,7 +8,6 @@ use App\Http\Controllers\ClientController;
 
 
 
-
 Route::get('client/transfer', [ClientController::class, 'showTransferForm'])->name('transfer-form');
 Route::post('client/transfer', [ClientController::class, 'transfer'])->name('transfer');
 
