@@ -93,26 +93,24 @@ class UserController extends Controller
     }
 
     // Méthode pour le tableau de bord du client
-   public function clientDashboard()
-{
-    $user = auth()->user();
-    $sentTransactionCount = $user->sentTransactions()->count();
-    $receivedTransactionCount = $user->receivedTransactions()->count();
+    public function clientDashboard()
+    {
+        $user = auth()->user();
+        $sentTransactionCount = $user->sentTransactions()->count();
+        $receivedTransactionCount = $user->receivedTransactions()->count();
+        $totalTransactionCount = $sentTransactionCount + $receivedTransactionCount;
 
-    $totalTransactionCount = $sentTransactionCount + $receivedTransactionCount;
+        // Récupérer les cinq dernières transactions de l'utilisateur
+        $lastTransactions = Transaction::where('sender_id', $user->id)
+            ->orWhere('receiver_id', $user->id)
+            ->latest()
+            ->take(7)
+            ->get();
 
-    // Récupérer les trois dernières transactions de l'utilisateur
-    $lastTransactions = Transaction::where('sender_id', $user->id)
-                                    ->orWhere('receiver_id', $user->id)
-                                    ->latest()
-                                    ->take(3)
-                                    ->get();
-
-    return view('client.dashboard', [
-        'user' => $user,
-        'totalTransactionCount' => $totalTransactionCount,
-        'lastTransactions' => $lastTransactions
-    ]);
-}
-
+        return view('client.dashboard', [
+            'user' => $user,
+            'totalTransactionCount' => $totalTransactionCount,
+            'lastTransactions' => $lastTransactions
+        ]);
+    }
 }

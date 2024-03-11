@@ -31,7 +31,7 @@ Route::get('teller/get-account-balance', [TellerController::class, 'getAccountBa
 
 // Page d'accueil
 Route::get('/', function () {
-    return view('admin.welcome');
+    return view('users.login');
 });
 
 // Routes d'inscription
