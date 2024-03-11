@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -92,8 +93,26 @@ class UserController extends Controller
     }
 
     // Méthode pour le tableau de bord du client
-    public function clientDashboard()
-    {
-        return view('client.dashboard');
-    }
+   public function clientDashboard()
+{
+    $user = auth()->user();
+    $sentTransactionCount = $user->sentTransactions()->count();
+    $receivedTransactionCount = $user->receivedTransactions()->count();
+
+    $totalTransactionCount = $sentTransactionCount + $receivedTransactionCount;
+
+    // Récupérer les trois dernières transactions de l'utilisateur
+    $lastTransactions = Transaction::where('sender_id', $user->id)
+                                    ->orWhere('receiver_id', $user->id)
+                                    ->latest()
+                                    ->take(3)
+                                    ->get();
+
+    return view('client.dashboard', [
+        'user' => $user,
+        'totalTransactionCount' => $totalTransactionCount,
+        'lastTransactions' => $lastTransactions
+    ]);
+}
+
 }
