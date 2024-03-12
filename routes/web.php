@@ -72,3 +72,5 @@ Route::post('/check-unique', [AccountController::class, 'checkUnique']);
 Route::post('/toggle-user-status', [AdminController::class, 'toggleStatus'])->name('toggle.user.status');
 Route::get('/teller/create', [AccountController::class, 'showTellerForm'])->name('teller.create');
 Route::post('/teller/create', [AccountController::class, 'createTeller'])->name('teller.store');
+
+
