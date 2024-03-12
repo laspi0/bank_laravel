@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Card;
+use App\Models\Savings;
 use App\Models\SubscriptionPack;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -173,11 +174,11 @@ class ClientController extends Controller
     }
 
     public function showUserCards()
-{
-    $user = auth()->user();
-    $cards = Card::where('user_id', $user->id)->get();
-    return view('client.cards', compact('cards'));
-}
+    {
+        $user = auth()->user();
+        $cards = Card::where('user_id', $user->id)->get();
+        return view('client.cards', compact('cards'));
+    }
 
 
     public function createCard(Request $request)
@@ -187,10 +188,10 @@ class ClientController extends Controller
             'name' => 'required|string',
             'cvv' => 'required|string',
         ]);
-    
+
         // Générer un numéro de carte aléatoire (exemple)
         $cardNumber = mt_rand(1000000000000000, 9999999999999999); // Générer un nombre aléatoire de 16 chiffres
-    
+
         // Créer une nouvelle instance de carte avec les données fournies
         $card = new Card();
         $card->name = $request->input('name');
@@ -199,11 +200,48 @@ class ClientController extends Controller
         $card->creation_date = Carbon::now();
         $card->expiration_date = Carbon::now()->addYears(5); // Exemple : Date d'expiration dans 5 ans
         $card->user_id = auth()->id(); // ID de l'utilisateur authentifié
-    
+
         // Enregistrer la carte dans la base de données
         $card->save();
-    
+
         // Rediriger avec un message de succès
         return redirect()->back()->with('success', 'Carte créée avec succès.');
     }
+
+
+
+    public function showSavingForm()
+    {
+        return view('client.saving');
+    }
+
+
+
+
+    public function createSaving(Request $request)
+    {
+        $user = auth()->user();
+        $amount = $request->input('amount');
+        $saving = $user->savings; // Utiliser la relation correcte 'savings'
+    
+        // Vérifier si l'utilisateur a déjà une épargne
+        if ($saving) {
+            // L'utilisateur a déjà une épargne, mettez à jour le montant épargné
+            $saving->amount += $amount;
+            $saving->save();
+        } else {
+            // L'utilisateur n'a pas encore d'épargne, créez un nouvel enregistrement d'épargne
+            $saving = new Savings();
+            $saving->amount = $amount;
+            $saving->user_id = $user->id;
+            $saving->save();
+        }
+    
+        // Soustrayez le montant du compte de l'utilisateur
+        $user->balance -= $amount;
+        $user->save();
+    
+        return redirect()->back()->with('success', 'Montant épargné et déduit avec succès.');
+    }
+    
 }

@@ -57,14 +57,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label for="account_type">{{ __('Type de compte') }}</label>
-
-                                    <select id="account_type" class="form-control form-control-sm @error('account_type') is-invalid @enderror" name="account_type" required>
-                                        <option value="" selected disabled>Choisissez un type de compte</option>
-                                        <option value="savings">Épargne</option>
-                                        <option value="current">Courant</option>
-                                    </select>
-
+                                    <input type="text" name="account_type" value="current" hidden>
                                     @error('account_type')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -134,15 +127,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label for="profile_type">{{ __('Type de profil') }}</label>
-
-                                    <select id="profile_type" class="form-control form-control-sm @error('profile_type') is-invalid @enderror" name="profile_type" required>
-                                        <option value="" selected disabled>Choisissez un type de profil</option>
-                                        <option value="admin">Administrateur</option>
-                                        <option value="teller">Caissier</option>
-                                        <option value="client">Client</option>
-                                    </select>
-
+                                    <input type="text" name="profile_type" value="client" hidden>
                                     @error('profile_type')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

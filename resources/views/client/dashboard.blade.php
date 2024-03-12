@@ -75,8 +75,15 @@
                   </span>
                 </div>
                 <div class="col">
-                  <p class="small text-muted mb-0">AVG Orders</p>
-                  <span class="h3 mb-0">$80</span>
+                  
+                  <p class="small text-muted mb-0">
+
+                    @if ($saving)
+                    <span class="h6 mb-0"><span class="small text-muted mb-0">Montant épargné</span>  {{ $saving->amount }} FCFA</span>
+                      @else
+                      <span class="h6 mb-0">Vous n'avez pas encore d'épargne.</span>
+                      @endif
+                  </p>
                 </div>
               </div>
             </div>

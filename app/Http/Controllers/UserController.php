@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -48,7 +48,6 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
         // Tentative de connexion de l'utilisateur
         if (Auth::attempt($credentials)) {
             // Redirection vers le tableau de bord spécifique au type de profil
@@ -57,7 +56,7 @@ class UserController extends Controller
                     return redirect()->route('admin.dashboard');
                     break;
                 case 'teller':
-                    return redirect()->route('teller.dashboard');
+                    return redirect()->route('teller.balance');
                     break;
                 case 'client':
                     return redirect()->route('client.dashboard');
@@ -83,7 +82,39 @@ class UserController extends Controller
     // Méthode pour le tableau de bord de l'administrateur
     public function adminDashboard()
     {
-        return view('admin.dashboard');
+        // Récupérer le nombre d'utilisateurs avec le profil "client"
+        $countClients = User::where('profile_type', 'client')->count();
+
+        // Récupérer le nombre d'utilisateurs avec le profil "teller"
+        $countTellers = User::where('profile_type', 'teller')->count();
+
+        // Récupérer la somme totale des balances de tous les utilisateurs
+        $totalBalance = User::sum('balance');
+
+        // Récupérer la somme des transactions hebdomadaires
+        $weeklyTransactions = Transaction::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('amount');
+
+        // Récupérer la somme des transactions journalières
+        $dailyTransactions = Transaction::whereDate('created_at', Carbon::today())->sum('amount');
+
+        // Récupérer la somme des transactions mensuelles
+        $monthlyTransactions = Transaction::whereMonth('created_at', Carbon::now()->month)->sum('amount');
+        $totalTransactions = Transaction::count('amount');
+        $annualBalance = User::sum('balance');
+
+
+
+        // Passer les données à la vue
+        return view('admin.dashboard', [
+            'countClients' => $countClients,
+            'countTellers' => $countTellers,
+            'totalBalance' => $totalBalance,
+            'weeklyTransactions' => $weeklyTransactions,
+            'dailyTransactions' => $dailyTransactions,
+            'monthlyTransactions' => $monthlyTransactions,
+            'totalTransactions' => $totalTransactions,
+            'annualBalance' => $annualBalance,
+        ]);
     }
 
     // Méthode pour le tableau de bord du guichetier
@@ -100,7 +131,8 @@ class UserController extends Controller
         $receivedTransactionCount = $user->receivedTransactions()->count();
         $totalTransactionCount = $sentTransactionCount + $receivedTransactionCount;
 
-        // Récupérer les cinq dernières transactions de l'utilisateur
+        $saving = $user->savings;
+
         $lastTransactions = Transaction::where('sender_id', $user->id)
             ->orWhere('receiver_id', $user->id)
             ->latest()
@@ -110,6 +142,7 @@ class UserController extends Controller
         return view('client.dashboard', [
             'user' => $user,
             'totalTransactionCount' => $totalTransactionCount,
+            'saving' => $saving,
             'lastTransactions' => $lastTransactions
         ]);
     }

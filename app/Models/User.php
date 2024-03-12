@@ -50,4 +50,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(SubscriptionPack::class);
     }
+    public function savings()
+    {
+        return $this->hasOne(Savings::class);
+    }
 }

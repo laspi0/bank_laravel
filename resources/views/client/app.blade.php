@@ -75,14 +75,14 @@
 
                     <li class="nav-item w-100">
                         <a href="{{ url('client/transfer') }}" class="nav-link">
-                            <i class="fe fe-calendar fe-16"></i>
+                            <i class="fe fe-layers fe-16"></i>
                             <span class="ml-3 item-text">Effectuer un transfert</span>
                         </a>
                     </li>
 
                     <li class="nav-item w-100">
                         <a href="{{ url('client/transaction') }}" class="nav-link">
-                            <i class="fe fe-calendar fe-16"></i>
+                            <i class="fe fe-file-text fe-16"></i>
                             <span class="ml-3 item-text">Voir ls transactions</span>
                         </a>
                     </li>
@@ -94,14 +94,20 @@
                     </li>
                     <li class="nav-item w-100">
                         <a href="{{ url('client/cards/create') }}" class="nav-link">
-                            <i class="fe fe-calendar fe-16"></i>
+                            <i class="fe fe-credit-card fe-16"></i>
                             <span class="ml-3 item-text">Créer une carte</span>
                         </a>
                     </li>
                     <li class="nav-item w-100">
                         <a href="{{ url('client/cards') }}" class="nav-link">
-                            <i class="fe fe-calendar fe-16"></i>
+                            <i class="fe fe-grid fe-16"></i>
                             <span class="ml-3 item-text">Voir mes cartes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item w-100">
+                        <a href="{{ url('client/savings/create') }}" class="nav-link">
+                            <i class="fe fe-save fe-16"></i>
+                            <span class="ml-3 item-text">Epargner</span>
                         </a>
                     </li>
                 </ul>
