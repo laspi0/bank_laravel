@@ -40,7 +40,7 @@ class AccountController extends Controller
     $user = User::create($validatedData);
 
     // Envoyer les informations par e-mail
-    Mail::to($user->email)->send(new InformationsCompte($user));
+    // Mail::to($user->email)->send(new InformationsCompte($user));
 
     // Rediriger l'utilisateur vers une page de confirmation ou toute autre page appropriée
     return redirect('/admin/clients')->with('success', 'Le compte a été créé avec succès.');

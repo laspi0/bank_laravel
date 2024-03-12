@@ -56,7 +56,7 @@ class UserController extends Controller
                     return redirect()->route('admin.dashboard');
                     break;
                 case 'teller':
-                    return redirect()->route('teller.balance');
+                    return redirect()->route('deposit.make');
                     break;
                 case 'client':
                     return redirect()->route('client.dashboard');
