@@ -4,6 +4,23 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\TellerController;
+use App\Http\Controllers\ClientController;
+
+Route::get('client/transaction', [ClientController::class, 'userTransactions'])->name('user.transactions');
+Route::get('/calculate-transfer-fee', [ClientController::class, 'calculateTransferFee'])->name('calculate-transfer-fee');
+Route::get('client/transfer', [ClientController::class, 'showTransferForm'])->name('transfer-form');
+Route::post('client/transfer', [ClientController::class, 'transfer'])->name('transfer');
+Route::get('client/purchase', [ClientController::class, 'showPurchaseForm'])->name('purchase.form');
+Route::post('client/purchase', [ClientController::class, 'purchasePack'])->name('purchase.pack');
+Route::get('client/cards/create', [ClientController::class, 'showCardForm'])->name('cards.create');
+Route::post('client/cards', [ClientController::class, 'createCard'])->name('cards.store');
+Route::get('client/cards', [ClientController::class, 'showUserCards'])->name('cards.index');
+Route::get('client/savings/create', [ClientController::class, 'showSavingForm'])->name('savings.create');
+Route::post('client/savings', [ClientController::class, 'createSaving'])->name('saving.create');
+
+
+
+
 
 
 // Affiche le formulaire de dépôt
@@ -17,7 +34,7 @@ Route::get('teller/get-account-balance', [TellerController::class, 'getAccountBa
 
 // Page d'accueil
 Route::get('/', function () {
-    return view('admin.welcome');
+    return view('users.login');
 });
 
 // Routes d'inscription
@@ -52,8 +69,8 @@ Route::get('/admin/tellers', [AdminController::class, 'getTellers'])->name('admi
 Route::get('/create', [AccountController::class, 'showCreateForm'])->name('accounts.create');
 Route::post('/accounts', [AccountController::class, 'create'])->name('accounts.store');
 Route::post('/check-unique', [AccountController::class, 'checkUnique']);
-
-
-
-
 Route::post('/toggle-user-status', [AdminController::class, 'toggleStatus'])->name('toggle.user.status');
+Route::get('/teller/create', [AccountController::class, 'showTellerForm'])->name('teller.create');
+Route::post('/teller/create', [AccountController::class, 'createTeller'])->name('teller.store');
+
+

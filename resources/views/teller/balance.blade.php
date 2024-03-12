@@ -1,17 +1,15 @@
 @extends('teller.app')
-
-@section('content1')
-
+@section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-12">
+        <div class="col-6">
             <div class="card shadow mb-4">
                 <div class="card-header">
                     <strong class="card-title">Vérification du solde du compte</strong>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <form id="balanceForm" action="#" method="POST">
                                 <div class="form-group mb-3">
                                     <label for="account_number">{{ __('Numéro de compte') }}</label>
@@ -29,7 +27,10 @@
                                     <label for="account_balance">{{ __('Solde du compte') }}</label>
                                     <input type="text" class="form-control form-control-sm" id="account_balance" disabled>
                                 </div>
-                                <button type="button" class="btn btn-primary btn-sm" id="check_balance">Vérifier le solde</button>
+                                <div class="text-center">
+
+                                    <button type="button" class="btn btn-primary btn-sm" id="check_balance">Vérifier le solde</button>
+                                </div>
                             </form>
                         </div> <!-- /.col -->
                     </div>
